@@ -32,32 +32,45 @@ cd ./build
 if [ `uname` = "Darwin" ]; then
     cmake .. -LAH -G "Ninja" \
     -Wno-dev \
-    -DCMAKE_OSX_DEPLOYMENT_TARGET="10.9" \
-    -DCMAKE_OSX_SYSROOT="$HOME/MacOSX-SDKs/MacOSX10.9.sdk" \
+    -DCMAKE_OSX_DEPLOYMENT_TARGET="12.3" \
+    -DCMAKE_OSX_SYSROOT="/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk" \
     -DVMTK_BUILD_TESTING:BOOL=ON \
-    -DSUPERBUILD_INSTALL_PREFIX:STRING=${PREFIX} \
     -DCMAKE_BUILD_TYPE:STRING="Release" \
-    -DVTK_LEGACY_SILENT:BOOL=ON \
-    -DITK_LEGACY_SILENT:BOOL=ON \
+    -DVTK_LEGACY_SILENT:BOOL=OFF \
+    -DITK_LEGACY_SILENT:BOOL=OFF \
     -DVTK_VMTK_USE_COCOA:BOOL=ON \
     -DVMTK_RENDERING_BACKEND:STRING="OpenGL2" \
-    -DUSE_SYSTEM_VTK:BOOL=ON \
-    -DUSE_SYSTEM_ITK:BOOL=ON \
-    -DPYTHON_EXECUTABLE="$PYTHON" \
-    -DCMAKE_INSTALL_PREFIX="$PREFIX" \
-    -DVMTK_MODULE_INSTALL_LIB_DIR="$PREFIX"/vmtk \
-    -DINSTALL_PKGCONFIG_DIR="$PREFIX"/lib/pkgconfig \
-    -DVMTK_BREW_PYTHON:BOOL=OFF \
     -DVMTK_USE_RENDERING:BOOL=ON \
     -DVTK_VMTK_CONTRIB:BOOL=ON \
     -DVMTK_CONTRIB_SCRIPTS:BOOL=ON \
-    -DVMTK_USE_SUPERBUILD:BOOL=OFF \
-    -DVMTK_PYTHON_VERSION:STRING="python${PY_VER}" \
     -DCMAKE_CXX_STANDARD=11 \
     -DCMAKE_CXX_STANDARD_REQUIRED=ON \
-    -DCMAKE_CXX_EXTENSIONS=OFF
+    -DUSE_SYSTEM_VTK:BOOL=ON \
+    -DUSE_SYSTEM_ITK:BOOL=ON \
+    -DCMAKE_CXX_EXTENSIONS=OFF \
+    -DVMTK_USE_VTK9=ON \
+    -DVMTK_USE_SUPERBUILD:BOOL=OFF \
+    -DVMTK_USE_ITK5=ON \
+    -DPYTHON_INCLUDE_DIR=$(python3 -c "from distutils.sysconfig import get_python_inc; print(get_python_inc())")  \
+    -DPYTHON_LIBRARY=$(python3 -c "import distutils.sysconfig as sysconfig; print(sysconfig.get_config_var('LIBDIR'))") \
+    -DPYTHON_EXECUTABLE="/opt/homebrew/bin/python3" \
+    -DVMTK_PYTHON_VERSION:STRING="python3" \
+    -DVMTK_BREW_PYTHON:BOOL=ON \
+    -DVMTK_VTK_WRAP_PYTHON:BOOL=OFF \
+    -DVTK_VMTK_WRAP_PYTHON:BOOL=ON \
+    -DVMTK_PYTHON_VERSION:STRING="python3" \
+    -DPython3_FIND_STRATEGY=LOCATION \
+    -DQt5_DIR="/opt/homebrew/opt/qt@5/lib/cmake/Qt5" \
+    -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang\
+    -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ \
+    -DVTK_DIR="/opt/homebrew/Cellar/vtk/9.1.0_4/lib/cmake" \
+    -DITK_DIR="/opt/homebrew/Cellar/itk/5.2.1_2/lib/cmake"
 
-    ninja install
+    # -DSUPERBUILD_INSTALL_PREFIX:STRING=${PREFIX} \
+    # ninja install
+    # -DCMAKE_INSTALL_PREFIX="$PREFIX" \
+    # -DVMTK_MODULE_INSTALL_LIB_DIR="$PREFIX"/vmtk \
+    # -DINSTALL_PKGCONFIG_DIR="$PREFIX"/lib/pkgconfig \
 fi
 
 if [ `uname` = "Linux" ]; then
